@@ -16,6 +16,7 @@ import java.util.EventListener;
 public class Controller{
     
     private View1 views;
+    private static Model m;
 
     Controller (Model model, View1 view)
     {
@@ -27,7 +28,14 @@ public class Controller{
     class seatListener implements ActionListener {                                        
         public void actionPerformed(ActionEvent e) {
             views.checkout();
-        }      
+        }   
+        
+        public void btnSignup(View v)
+    {
+        m.createUser(v.getSignUpUser(), v.getSignUpPass());
+        v.setStatus(m.getStatus());
+        
+    }
     }  
 }
 
