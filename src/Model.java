@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package movieproject;
+package project3;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.ArrayList;
 
 
 public class Model {
@@ -58,11 +59,28 @@ public class Model {
         rs = null;
         
         jdbc_drivers = "com.mysql.jdbc.Driver";
-        url = "jdbc:mysql://localhost:3306/movie_maniacs";
+        url = "jdbc:mysql://localhost:3306/movieticket";
         user = "root";
-        password = "";
+        password = "root";
         
     }
+    
+    public Connection getConnection(){
+           // connect to databese and set up Statement
+            Connection conn = null;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/movieticket?autoReconnect=true&useSSL=false","root","root");
+            st = conn.createStatement();
+
+        }catch ( Exception e ) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            //conn.close();
+            System.exit(0);
+        }
+      
+        return conn;
+     }
     
     public int[][] getSeats(int show) {
         String s = "";
@@ -78,11 +96,16 @@ public class Model {
         
         
         try {
-            System.setProperty("jdbc.drivers", jdbc_drivers);
+//            System.setProperty("jdbc.drivers", jdbc_drivers);
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+            } catch(ClassNotFoundException e) {
+                System.err.println("cant get DB Driver");
+            }
  
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/movie_maniacs", "root", "");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/movieticket", "root", "root");
             st = con.createStatement();
-            rs = st.executeQuery("SELECT * FROM showtime WHERE Movie_ID = '"+show+"'");
+            rs = st.executeQuery("SELECT * FROM seats WHERE time_id = '"+show+"'");
 
             if (rs.next()) {
                 s = rs.getString(6);
@@ -129,7 +152,7 @@ public class Model {
         try {
             System.setProperty("jdbc.drivers", jdbc_drivers);
  
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/movie_maniacs", "root", "");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/movieticket", "root", "root");
             st = con.createStatement();
             rs = st.executeQuery("SELECT * FROM movies WHERE Movie_ID = "+mov+"");
 
@@ -174,7 +197,7 @@ public class Model {
         try {
             System.setProperty("jdbc.drivers", jdbc_drivers);
  
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/movie_maniacs", "root", "");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/movieticket", "root", "root");
             st = con.createStatement();
             rs = st.executeQuery("SELECT * FROM movies");
             
@@ -216,7 +239,7 @@ public class Model {
         try {
             System.setProperty("jdbc.drivers", jdbc_drivers);
  
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/movie_maniacs", "root", "");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/movieticket", "root", "");
             st = con.createStatement();
             st.executeUpdate("INSERT INTO tickets (Show_ID, Seat, Name) VALUES ('"+sid+"', '"+seat+"', '"+name+"')");
             
@@ -244,5 +267,60 @@ public class Model {
                 //lgr.log(Level.WARNING, ex.getMessage(), ex);
                             }
         }
+    }
+    
+    public int insert(String Table, ArrayList input) {
+        try {
+            String query="insert into "+Table+" ";
+            query+= "values (";
+            query+="'"+input.get(0)+"'";
+            for(int i=1; i<input.size() ;i++){
+                query+=", '"+input.get(i)+"'";
+            }
+            query+= " )";
+            st.executeUpdate(query);
+        } catch(SQLException e) {
+            System.err.println("SQL Error");
+        }
+        
+        return 0;
+    }
+    
+    public int delete(String Table, int input) {
+        try {
+            String query="DELETE FROM " + Table + " WHERE main_ID=\""+ input +"\";";
+            st.executeUpdate(query);
+        } catch(SQLException e) {
+            System.err.println("SQL Error");
+        }
+        
+        return 0;
+    }
+    
+    public ResultSet select(String Table, String column, String value) {
+        try {
+            String query="SELECT FROM " + Table + " WHERE " + column + "=\""+ value +"\";";
+            rs = st.executeQuery(query);
+        } catch(SQLException e) {
+            System.err.println("SQL Error");
+        }
+        
+        return rs;
+    }
+    
+    public int update(String Table, String col, String value, String rowID, String valueID) {
+        try {
+            String query="Update "+Table+" SET "+col+" = \'"+value+"\' WHERE "+rowID+" = "+valueID+"";
+            st.executeUpdate(query);
+        } catch(SQLException e) {
+            System.err.println("SQL Error");
+        }
+        
+        return 0;
+    }
+    
+    public static void main(String[] args) {
+        Model testModel = new Model();
+        testModel.getConnection();
     }
 }
