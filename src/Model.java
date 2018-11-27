@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -22,49 +23,16 @@ public class Model {
     private Connection con;
     private java.sql.Statement st;
     private ResultSet rs;
-//    private String  jdbc_drivers, url, user, password = "";
-//    private String current_user, current_native, current_lastConver;
-//    private String status;
-//    
-//    public static final String PROP_SAMPLE_PROPERTY = "sampleProperty";
-//    
-//    private String sampleProperty;
-//    
-//    private PropertyChangeSupport propertySupport;
     
+    private String  jdbc_drivers, url, user, password = "";
+    private String current_user, current_native, current_lastConver;
+    private String status;
+    String currentUser;
+
     public Model() {
         con = this.getConnection();
     }
-    
-//    public String getSampleProperty() {
-//        return sampleProperty;
-//    }
-//    
-//    public void setSampleProperty(String value) {
-//        String oldValue = sampleProperty;
-//        sampleProperty = value;
-//        propertySupport.firePropertyChange(PROP_SAMPLE_PROPERTY, oldValue, sampleProperty);
-//    }
-//    
-//    public void addPropertyChangeListener(PropertyChangeListener listener) {
-//        propertySupport.addPropertyChangeListener(listener);
-//    }
-//    
-//    public void removePropertyChangeListener(PropertyChangeListener listener) {
-//        propertySupport.removePropertyChangeListener(listener);
-//    }
-//    
-//    public void database(){
-//        con = null;
-//        st = null;
-//        rs = null;
-//        
-//        jdbc_drivers = "com.mysql.jdbc.Driver";
-//        url = "jdbc:mysql://localhost:3306/movieticket";
-//        user = "root";
-//        password = "root";
-//        
-//    }
+
     
     public Connection getConnection(){
            // connect to databese and set up Statement
@@ -83,89 +51,25 @@ public class Model {
         return conn;
      }
     
-//    public int[][] getSeats(int show) {
-//        String s = "";
-//        int count = 0;
-//        int[][] seats = {
-//            new int[8],
-//            new int[8],
-//            new int[10],
-//            new int[10],
-//            new int[10],
-//            new int[10],
-//        };
+
+    
+    //Sign up Database Code!!!! 
+//    void createUser(String uName, String password) {
 //        
-//        
-//        try {
-////            System.setProperty("jdbc.drivers", jdbc_drivers);
-//            try {
-//                Class.forName("com.mysql.jdbc.Driver");
-//            } catch(ClassNotFoundException e) {
-//                System.err.println("cant get DB Driver");
-//            }
-// 
-//            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/movieticket", "root", "root");
-//            st = con.createStatement();
-//            rs = st.executeQuery("SELECT * FROM seats WHERE time_id = '"+show+"'");
-//
-//            if (rs.next()) {
-//                s = rs.getString(6);
-//            }
-//
-//        } catch (SQLException ex) {
-//            //Logger lgr = Logger.getLogger(Version.class.getName());
-//            //lgr.log(Level.SEVERE, ex.getMessage(), ex);
-//               Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
-//               System.out.println("Exception Caught");
-//               
-//        } finally {
-//            try {
-//                if (rs != null) {
-//                    rs.close();
-//                }
-//                if (st != null) {
-//                    st.close();
-//                }
-//                if (con != null) {
-//                    con.close();
-//                }
-//
-//            } catch (SQLException ex) {
-//               // Logger lgr = Logger.getLogger(Version.class.getName());
-//                Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
-//                //lgr.log(Level.WARNING, ex.getMessage(), ex);
-//                            }
-//        }
-//        
-//        
-//        for (int i = 0; i < 6; i++) {
-//            for (int j = 0; j < (i < 2? 8:10); j++) {
-//                seats[i][j] = Integer.parseInt(""+s.charAt(count));
-//            }
-//        }
-//        
-//        return seats;
-//    }
-//    
-//    
-//    public String getMovie(int mov) {
-//        String s = "";
 //        try {
 //            System.setProperty("jdbc.drivers", jdbc_drivers);
 // 
-//            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/movieticket", "root", "root");
+//            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/currency", "root", "");//update the connection and roots
 //            st = con.createStatement();
-//            rs = st.executeQuery("SELECT * FROM movies WHERE Movie_ID = "+mov+"");
-//
-//            if (rs.next()) {
-//                s = rs.getString(2);
-//            }
+//            //user_info is the table name , with column names being username and password.
+//            st.executeUpdate("INSERT INTO user_info (username, password) VALUES ('"+uName+"', '"+password+")");
+//           
 //
 //        } catch (SQLException ex) {
 //            //Logger lgr = Logger.getLogger(Version.class.getName());
 //            //lgr.log(Level.SEVERE, ex.getMessage(), ex);
 //               Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
-//               System.out.println("Exception Caught");
+//               setStatus("signup failed");
 //               
 //        } finally {
 //            try {
@@ -185,34 +89,46 @@ public class Model {
 //                //lgr.log(Level.WARNING, ex.getMessage(), ex);
 //                            }
 //        }
-//        
-//        return s;
 //    }
-//    
-//    /**
-//     * @return String array of all movies stored in the database
-//     */
-//    public String[] getListings() {
-//        String s = "";
-//        String[] results = {};
+    
+    public void createUser(String uName, String password) {
+        ArrayList columns = new ArrayList<>();
+        columns.add(uName);
+        columns.add(password);
+        this.insert("users", columns);
+    }
+    
+    public boolean login(String uName, String password) {
+            // users is the table name , with column names being username and password.
+            
+            rs = this.select("users", "Username", uName + "AND Password = " + password);
+            try {
+                if (rs.isLast()) {
+                    return false;
+                }
+            } catch (SQLException e) {
+                System.err.println(e);
+            }
+            
+            return true;
+    }
+    
+//    void createDate(String date) {
+//        
 //        try {
 //            System.setProperty("jdbc.drivers", jdbc_drivers);
 // 
-//            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/movieticket", "root", "root");
+//            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/currency", "root", "");//update the connection and roots
 //            st = con.createStatement();
-//            rs = st.executeQuery("SELECT * FROM movies");
-//            
-//            while (rs.next()) {
-//                s += rs.getString(2)+"@";   //Creates a string of all movies and uses "@" as a delimiter
-//            }
-//            
-//            results = s.split("@");         //Segments the string using the delimiter and stores each segment as an element in an array
+//            //user_info is the table name , with column names being username and password.
+//            st.executeUpdate("INSERT INTO user_info (date) VALUES ('"+date+"')");
+//           
 //
 //        } catch (SQLException ex) {
 //            //Logger lgr = Logger.getLogger(Version.class.getName());
 //            //lgr.log(Level.SEVERE, ex.getMessage(), ex);
 //               Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
-//               System.out.println("Exception Caught");
+//               setStatus("signup failed");
 //               
 //        } finally {
 //            try {
@@ -232,23 +148,23 @@ public class Model {
 //                //lgr.log(Level.WARNING, ex.getMessage(), ex);
 //                            }
 //        }
-//        
-//        return results;
 //    }
-//    
-//    public void createTicket(int sid, String seat, String name) {
+//    void createTime(String time) {
+//        
 //        try {
 //            System.setProperty("jdbc.drivers", jdbc_drivers);
 // 
-//            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/movieticket", "root", "");
+//            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/currency", "root", "");//update the connection and roots
 //            st = con.createStatement();
-//            st.executeUpdate("INSERT INTO tickets (Show_ID, Seat, Name) VALUES ('"+sid+"', '"+seat+"', '"+name+"')");
-//            
+//            //user_info is the table name , with column names being username and password.
+//            st.executeUpdate("INSERT INTO user_info (time) VALUES ('"+time+"')");
+//           
 //
 //        } catch (SQLException ex) {
 //            //Logger lgr = Logger.getLogger(Version.class.getName());
 //            //lgr.log(Level.SEVERE, ex.getMessage(), ex);
 //               Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
+//               setStatus("signup failed");
 //               
 //        } finally {
 //            try {
@@ -268,6 +184,108 @@ public class Model {
 //                //lgr.log(Level.WARNING, ex.getMessage(), ex);
 //                            }
 //        }
+//    }
+//    void createMovie(String movie) {
+//        
+//        try {
+//            System.setProperty("jdbc.drivers", jdbc_drivers);
+// 
+//            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/currency", "root", "");//update the connection and roots
+//            st = con.createStatement();
+//            //user_info is the table name , with column names being username and password.
+//            st.executeUpdate("INSERT INTO user_info (movie) VALUES ('"+movie+"')");
+//           
+//
+//        } catch (SQLException ex) {
+//            //Logger lgr = Logger.getLogger(Version.class.getName());
+//            //lgr.log(Level.SEVERE, ex.getMessage(), ex);
+//               Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
+//               setStatus("signup failed");
+//               
+//        } finally {
+//            try {
+//                if (rs != null) {
+//                    rs.close();
+//                }
+//                if (st != null) {
+//                    st.close();
+//                }
+//                if (con != null) {
+//                    con.close();
+//                }
+//
+//            } catch (SQLException ex) {
+//               // Logger lgr = Logger.getLogger(Version.class.getName());
+//                Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
+//                //lgr.log(Level.WARNING, ex.getMessage(), ex);
+//                            }
+//        }
+//    }
+    
+    
+    public ArrayList<String> getMovie(String datetime) {
+        ArrayList<String> movies = new ArrayList<>();
+        
+        try {
+            rs = this.select("times", "DateTime", datetime);
+            while (rs.next()) {
+                movies.add(rs.getString(4));
+            }
+        } catch(SQLException e) {
+            System.err.println(e);
+        }
+        
+        return movies;
+    }
+    
+    
+    public void createSeat(String datetime, String movie, String seat) {
+        // TODO: Get id for time of movie from times table
+        String id = "";
+        String key = "0";
+        try {
+            rs = this.select("times", "DateTime", datetime + "AND movies_name = " + movie);
+            rs.next();
+            id = rs.getString(1);
+            
+            // TODO: get the highest id form the seat table (use MAX)
+            st = con.createStatement();
+            rs = st.executeQuery("select max(idseats) as idseats from seats");
+            rs.next();
+            key = rs.getString(1);
+        } catch(SQLException e) {
+            System.err.println(e);
+        }
+        
+        key = Integer.toString(Integer.parseInt(key) + 1);
+        
+        // insert seat number with time id into seats table
+        ArrayList<String> columns = new ArrayList<>();
+        columns.add(key);
+        columns.add(id);
+        columns.add(seat);
+        this.insert("seats", columns);
+    }
+
+//    void setCurrentUser(String user) {
+//        currentUser = user;
+//    }
+//
+//    String getPassword(String uName) {
+//        return "";
+//    }
+//    
+//    void setStatus(String s) {
+//        status = s;
+//    }
+//    
+//    String getStatus() {
+//        return status;
+//    }
+//    
+//    String[] getUserInfo() {
+//        String[] temp = {current_user, current_native, current_lastConver};
+//        return temp;
 //    }
     
     public int insert(String Table, ArrayList input) {
@@ -354,6 +372,6 @@ public class Model {
 //        }
 
         // Testing delete method
-        testModel.delete("users", "Username", "TestUser");
+//        testModel.delete("users", "Username", "TestUser");
     }
 }

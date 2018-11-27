@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package movieTicket;
+package project3;
 
 import java.io.IOException;
 
@@ -15,10 +15,10 @@ public class Csc4380Project3 {
      */
     public static void main(String[] args) throws IOException {
         
-        Model model = new Model();
-        View1 view = new View1 (model);
-        Controller controller = new Controller (model, view);
-        view.setVisible(true);
+        Model m = new Model();
+        Controller c = new Controller();
+        View1 v = new View1(c);
+       
         
     }
     
