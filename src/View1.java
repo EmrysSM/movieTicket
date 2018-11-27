@@ -22,7 +22,7 @@ public class View1 extends javax.swing.JFrame {
     /**
      * Creates new form View
      */
-    public Controller c; 
+//    public Controller c; 
     public View1(Controller controller) {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -176,8 +176,8 @@ public class View1 extends javax.swing.JFrame {
             dropMovie.addItem(movies.get(i));
         }
     }
-    public void setConfirmation(String confirmation){
-        txtConfirmation.setText(c.getMovie()+c.getdateTime()+c.getSeat());
+    public void setConfirmation(String seat, String time, String movie){
+        txtConfirmation.setText("Seat: " + seat + "\nTime: " + time + "\nMovie: " + movie);
     }
       
       

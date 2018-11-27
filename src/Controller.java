@@ -40,15 +40,15 @@ public class Controller{
         setActions();
         views.setVisible(true);
 }
-    public String getdateTime(){
-        return dateTime;
-    }
-    public String getMovie(){
-        return movie;
-    }
-    public String getSeat(){
-        return seat;
-    }
+//    public String getdateTime(){
+//        return dateTime;
+//    }
+//    public String getMovie(){
+//        return movie;
+//    }
+//    public String getSeat(){
+//        return seat;
+//    }
     
       
       //The method using our listeners from our view. 
@@ -101,6 +101,7 @@ public class Controller{
            seat = views.getSeat();
           m.createSeat(dateTime, movie, seat);
           views.setTab(5); 
+          views.setConfirmation(seat, dateTime, movie);
        }
    } ; views.submitSeats(listenerseatD4);
    
