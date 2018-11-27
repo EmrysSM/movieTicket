@@ -18,16 +18,16 @@ import javax.swing.JLabel;
  * @author nikhitak
  */
 public class View1 extends javax.swing.JFrame {
-    
-//JButton [][] seats = new JButton [5][10];
+   
     /**
      * Creates new form View
      */
+    public Controller c; 
     public View1(Controller controller) {
         initComponents();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
-       // c = controller;
+      
     }
     
  public void loginUser(ActionListener number){
@@ -163,9 +163,7 @@ public class View1 extends javax.swing.JFrame {
     public String getDate() {
         return enterDateText.getText();
     }
-//      public String getDateTextField() {
-//        return txtFieldDate.getText();
-//    }
+
       public String getTime() {
         return enterTimeText.getText();
     } 
@@ -177,6 +175,9 @@ public class View1 extends javax.swing.JFrame {
         for (int i = 0; i < movies.size(); i++) {
             dropMovie.addItem(movies.get(i));
         }
+    }
+    public void setConfirmation(String confirmation){
+        txtConfirmation.setText(c.getMovie()+c.getdateTime()+c.getSeat());
     }
       
       
@@ -193,80 +194,15 @@ public class View1 extends javax.swing.JFrame {
         int y = (int) ((screen.getHeight() -getHeight()) /4.5);
         setLocation(x, y);
         
-        //this.setResizable(false);
+        
         
         initComponents();
-        //JLabel[] pics= new JLabel[] {pic1,pic2,pic3,pic4,pic5,pic6,pic7,pic8};
-      
-        
-        //pic1.setIcon(new javax.swing.ImageIcon("C:\\Users\\jphung1\\Downloads\\images.jpg"));
-        
-        //jPanel4.setVisible(false);          //sets the visibility of second panel to false until the user selects a movie
-        //jPanel2.setVisible(false);          //blocks visibility of seat selection panel until user chooses a movie time
-        /*
-        jPanel2.setLayout(new java.awt.GridLayout(5, 10, 10, 10));
-        genSeats();
-        addSeats();
-        
-        */
+       
  
     }
-    /*
-    public void showTime()
-    {
-        jPanel4.setVisible(true);
-    }
-    
-    //generates seats stored in 5x10 array
-    public void genSeats()
-    {
-        char c = 'A';
-        
-        for(int i=0; i<5; i++)
-        {
-            for(int j=0; j<10;j++)
-            {
-                seats[i][j] = new JButton(Character.toString(c)+Integer.toString(j+1));
-            }
-            c++;
-        }
-    }
+   
     
     
-    //this adds an action listener to the seat buttons. control will respond to this
-    public void addALSeats(ActionListener a)
-    {
-        for(int i=0; i<5; i++)
-        {
-            for(int j=0; j<10;j++)
-            {
-                seats[i][j].addActionListener(a);
-            }
-        }
-    }
-    //adds the seats to the panel
-    public void addSeats()
-    {
-        for(int i=0; i<5; i++)
-        {
-            for(int j=0; j<10;j++)
-            {
-                jPanel2.add(seats[i][j]);
-            }
-        }
-    }
-   */
-    
-    //this method should be called from control when the seat button is clicked. opens a dialog and asks the user for first and last name
-    public void checkout()
-    {
-        System.out.println("hello");
-        jDialog1.setTitle("Confirmation");
-        jDialog1.setLocationRelativeTo(null);
-        jDialog1.setPreferredSize(new Dimension(555,414));
-        jDialog1.pack();
-        jDialog1.setVisible(true);
-    }
     
     /**
      * This method is called from within the constructor to initialize the form.
